@@ -1,4 +1,5 @@
-// Basic smoke test for the ProjekTask app.
+// Basic smoke test: the app boots and shows the splash screen while the
+// session is being checked.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,12 +7,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:projektask/main.dart';
 
 void main() {
-  testWidgets('App boots and shows the connection test screen',
-      (WidgetTester tester) async {
+  testWidgets('App boots and shows the splash screen', (tester) async {
     await tester.pumpWidget(const ProjekTaskApp());
 
-    // The connection screen starts in a loading state contacting the backend.
-    expect(find.text('Contacting backend...'), findsOneWidget);
+    // First frame: the splash screen with the app name and a spinner.
+    expect(find.text('ProjekTask'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
