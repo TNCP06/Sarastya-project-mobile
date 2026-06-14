@@ -34,6 +34,11 @@ class _ProjekTaskAppState extends State<ProjekTaskApp> {
   late final ProjectDetailProvider _projectDetailProvider;
   late final GoRouter _router;
 
+  // Used to surface a "session expired" message from outside the widget tree
+  // (the 401 interceptor) without needing a BuildContext.
+  final GlobalKey<ScaffoldMessengerState> _messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +53,15 @@ class _ProjekTaskAppState extends State<ProjekTaskApp> {
     _projectDetailProvider =
         ProjectDetailProvider(_projectService, _taskService);
     _router = createRouter(_authProvider);
+
+    // Show a message when a session is dropped by a 401 (expired token).
+    _authProvider.onSessionExpired = () {
+      _messengerKey.currentState
+        ?..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(content: Text('Session expired. Please sign in again.')),
+        );
+    };
 
     // Validate any stored session, then let the router redirect accordingly.
     _authProvider.bootstrap();
@@ -73,6 +87,7 @@ class _ProjekTaskAppState extends State<ProjekTaskApp> {
       ],
       child: MaterialApp.router(
         title: 'ProjekTask',
+        scaffoldMessengerKey: _messengerKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D5AFE)),

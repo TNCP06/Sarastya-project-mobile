@@ -30,6 +30,11 @@ class AuthProvider extends ChangeNotifier {
   final AuthService _authService;
   final TokenStorage _tokenStorage;
 
+  /// Invoked when a session is dropped because the server returned 401 (an
+  /// expired/invalid token) — not on an explicit user logout. The app wires
+  /// this to show a "session expired" message.
+  VoidCallback? onSessionExpired;
+
   AuthStatus _status = AuthStatus.unknown;
   AuthStatus get status => _status;
 
@@ -96,6 +101,7 @@ class AuthProvider extends ChangeNotifier {
     _user = null;
     if (_status != AuthStatus.unauthenticated) {
       _setUnauthenticated();
+      onSessionExpired?.call();
     }
   }
 
