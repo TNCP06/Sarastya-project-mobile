@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 
 import '../providers/auth_provider.dart';
-import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
+import '../screens/projects_screen.dart';
 import '../screens/register_screen.dart';
 import '../screens/splash_screen.dart';
 
@@ -29,8 +29,8 @@ GoRouter createRouter(AuthProvider auth) {
         builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
+        path: '/projects',
+        builder: (context, state) => const ProjectsScreen(),
       ),
     ],
     redirect: (context, state) {
@@ -51,7 +51,7 @@ GoRouter createRouter(AuthProvider auth) {
 
       // Authenticated: keep the user out of the splash/auth screens.
       if (location == '/splash' || onAuthScreen) {
-        return '/home';
+        return '/projects';
       }
       return null;
     },
