@@ -1,4 +1,5 @@
 import '../models/project.dart';
+import '../models/project_detail.dart';
 import 'api_client.dart';
 
 /// Wraps the project endpoints of the API.
@@ -14,6 +15,12 @@ class ProjectService {
     return list
         .map((e) => Project.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// GET /api/projects/{id} → 200 the project with its tasks (404 if not owned).
+  Future<ProjectDetail> getProject(String id) async {
+    final res = await _apiClient.dio.get<Map<String, dynamic>>('/projects/$id');
+    return ProjectDetail.fromJson(res.data!);
   }
 
   /// POST /api/projects → 201 with the created project.
