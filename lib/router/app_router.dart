@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/auth_provider.dart';
 import '../screens/login_screen.dart';
+import '../screens/project_detail_screen.dart';
 import '../screens/projects_screen.dart';
 import '../screens/register_screen.dart';
 import '../screens/splash_screen.dart';
@@ -31,6 +32,12 @@ GoRouter createRouter(AuthProvider auth) {
       GoRoute(
         path: '/projects',
         builder: (context, state) => const ProjectsScreen(),
+      ),
+      GoRoute(
+        path: '/projects/:id',
+        builder: (context, state) => ProjectDetailScreen(
+          projectId: state.pathParameters['id']!,
+        ),
       ),
     ],
     redirect: (context, state) {

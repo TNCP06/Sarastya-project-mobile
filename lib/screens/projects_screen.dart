@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../models/project.dart';
@@ -46,6 +47,13 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         _showSnack('Project created');
       },
     );
+  }
+
+  Future<void> _openProject(Project project) async {
+    // Open the detail screen; on return, refresh so the task counts reflect
+    // any tasks added/removed/completed while inside.
+    await context.push('/projects/${project.id}');
+    if (mounted) context.read<ProjectProvider>().fetchProjects();
   }
 
   Future<void> _editProject(Project project) async {
@@ -163,6 +171,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     final project = provider.projects[index];
                     return ProjectCard(
                       project: project,
+                      onTap: () => _openProject(project),
                       onEdit: () => _editProject(project),
                       onDelete: () => _deleteProject(project),
                     );
