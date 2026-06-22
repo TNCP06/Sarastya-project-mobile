@@ -8,8 +8,11 @@
 
 ## Scope: focused client
 
-Repurpose the existing Flutter scaffold (Provider · Dio · flutter_secure_storage · go_router).
-Target a clean, demo-solid **read/stream client** — not full parity.
+> **Branch is a clean slate** (ProjekTask removed). Scaffold fresh via `flutter create` (new app id,
+> e.g. `id.web.tncp.saradrive`), using the ProjekTask app on `main` as a reference.
+
+Fresh Flutter app (Provider · Dio · flutter_secure_storage · go_router). Target a clean,
+demo-solid **read/stream client** — not full parity.
 
 **In scope:** splash, login/register (JWT), drive browse (folders + items grid), search, item /
 media detail, image viewing, **video streaming** (point `<video>`/player at the stream domain),
@@ -23,7 +26,7 @@ download trigger (open the bot deep link), loading/empty/error states.
 - Stream URLs come from `GET /papi/items/{id}/stream-info`; video plays from **stream.tncp.web.id**.
 
 ## Tasks
-- 4A ☐ Models: `User, Folder, Item, Part, Tag` (replace Project/Task). Dio base URL + JWT interceptor.
+- 4A ☐ `flutter create` fresh app; models `User, Folder, Item, Part, Tag`. Dio base URL + JWT interceptor.
        Services: `auth_service`, `drive_service` (browse/search/detail), `stream_service`.
 - 4B ☐ Screens: splash, login, register, drive browse (grid + folder nav), search, item/media
        detail, video player, download action.
