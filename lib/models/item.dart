@@ -1,4 +1,3 @@
-
 import 'part.dart';
 
 class Item {
@@ -58,7 +57,9 @@ class Item {
       hasThumb: json['hasThumb'] ?? false,
       firstPartId: json['firstPartId'],
       firstPartFileName: json['firstPartFileName'],
-      parts: json['parts'] != null ? (json['parts'] as List).map((p) => Part.fromJson(p)).toList() : null,
+      parts: json['parts'] != null
+          ? (json['parts'] as List).map((p) => Part.fromJson(p)).toList()
+          : null,
     );
   }
 }

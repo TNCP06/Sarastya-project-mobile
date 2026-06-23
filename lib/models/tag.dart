@@ -1,4 +1,3 @@
-
 class Tag {
   final int id;
   final String name;
@@ -7,10 +6,6 @@ class Tag {
   Tag({required this.id, required this.name, required this.color});
 
   factory Tag.fromJson(Map<String, dynamic> json) {
-    return Tag(
-      id: json['id'],
-      name: json['name'],
-      color: json['color'] ?? '',
-    );
+    return Tag(id: json['id'], name: json['name'], color: json['color'] ?? '');
   }
 }

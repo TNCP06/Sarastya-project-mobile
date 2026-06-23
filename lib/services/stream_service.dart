@@ -1,4 +1,3 @@
-
 import 'api_client.dart';
 
 class StreamService {

@@ -1,4 +1,3 @@
-
 class Folder {
   final int id;
   final String name;

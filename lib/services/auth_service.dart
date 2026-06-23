@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'api_client.dart';
 import 'token_storage.dart';
@@ -36,10 +35,10 @@ class AuthService extends ChangeNotifier {
 
   Future<void> login(String email, String password) async {
     try {
-      final response = await ApiClient.dio.post('/auth/login', data: {
-        'email': email,
-        'password': password,
-      });
+      final response = await ApiClient.dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
       final token = response.data['token'];
       await TokenStorage.saveToken(token);
       _currentUser = User.fromJson(response.data['user']);
@@ -51,11 +50,10 @@ class AuthService extends ChangeNotifier {
 
   Future<void> register(String name, String email, String password) async {
     try {
-      final response = await ApiClient.dio.post('/auth/register', data: {
-        'name': name,
-        'email': email,
-        'password': password,
-      });
+      final response = await ApiClient.dio.post(
+        '/auth/register',
+        data: {'name': name, 'email': email, 'password': password},
+      );
       final token = response.data['token'];
       await TokenStorage.saveToken(token);
       _currentUser = User.fromJson(response.data['user']);

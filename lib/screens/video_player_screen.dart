@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -29,17 +28,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       final info = await StreamService.fetchStreamInfo(int.parse(widget.id));
       final parts = info['parts'] as List;
       if (parts.isEmpty) throw Exception('No streamable parts available');
-      
+
       final streamUrl = parts[0]['streamUrl'];
-      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(streamUrl));
+      _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(streamUrl),
+      );
       await _videoPlayerController!.initialize();
-      
+
       _chewieController = ChewieController(
         videoPlayerController: _videoPlayerController!,
         autoPlay: true,
         looping: false,
       );
-      
+
       setState(() => _isLoading = false);
     } catch (e) {
       setState(() {
@@ -64,12 +65,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(child: Text(_error!, style: TextStyle(color: Colors.white)))
-              : Center(
-                  child: Chewie(
-                    controller: _chewieController!,
-                  ),
-                ),
+          ? Center(
+              child: Text(_error!, style: TextStyle(color: Colors.white)),
+            )
+          : Center(child: Chewie(controller: _chewieController!)),
     );
   }
 }

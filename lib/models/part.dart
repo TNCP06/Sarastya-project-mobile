@@ -1,4 +1,3 @@
-
 class Part {
   final int id;
   final int partNumber;
@@ -22,7 +21,9 @@ class Part {
 
   factory Part.fromJson(Map<String, dynamic> json) {
     return Part(
-      id: json['id'] ?? json['partId'], // handle stream-info Part payload vs detail Part payload
+      id:
+          json['id'] ??
+          json['partId'], // handle stream-info Part payload vs detail Part payload
       partNumber: json['partNumber'],
       channelMsgId: json['channelMsgId'],
       fileName: json['fileName'],

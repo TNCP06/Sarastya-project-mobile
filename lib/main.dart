@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -36,8 +35,16 @@ class MyApp extends StatelessWidget {
       GoRoute(path: '/register', builder: (context, state) => RegisterScreen()),
       GoRoute(path: '/drive', builder: (context, state) => DriveScreen()),
       GoRoute(path: '/search', builder: (context, state) => SearchScreen()),
-      GoRoute(path: '/item/:id', builder: (context, state) => ItemDetailScreen(id: state.pathParameters['id']!)),
-      GoRoute(path: '/player/:id', builder: (context, state) => VideoPlayerScreen(id: state.pathParameters['id']!)),
+      GoRoute(
+        path: '/item/:id',
+        builder: (context, state) =>
+            ItemDetailScreen(id: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/player/:id',
+        builder: (context, state) =>
+            VideoPlayerScreen(id: state.pathParameters['id']!),
+      ),
     ],
   );
 
@@ -47,10 +54,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Sarastya Drive',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
       routerConfig: _router,
     );
   }

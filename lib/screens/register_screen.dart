@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +26,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       context.go('/drive');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -42,12 +43,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Name')),
-            TextField(controller: _emailController, decoration: InputDecoration(labelText: 'Email')),
-            TextField(controller: _passwordController, decoration: InputDecoration(labelText: 'Password'), obscureText: true),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
             SizedBox(height: 20),
-            _isLoading ? CircularProgressIndicator() : ElevatedButton(onPressed: _register, child: Text('Register')),
-            TextButton(onPressed: () => context.pop(), child: Text('Back to Login'))
+            _isLoading
+                ? CircularProgressIndicator()
+                : ElevatedButton(onPressed: _register, child: Text('Register')),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: Text('Back to Login'),
+            ),
           ],
         ),
       ),

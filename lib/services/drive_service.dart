@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'api_client.dart';
 import '../models/drive_response.dart';
@@ -22,7 +21,10 @@ class DriveService extends ChangeNotifier {
     _currentSpace = space;
     notifyListeners();
     try {
-      final response = await ApiClient.dio.get('/drive', queryParameters: {'space': space});
+      final response = await ApiClient.dio.get(
+        '/drive',
+        queryParameters: {'space': space},
+      );
       _currentDrive = DriveResponse.fromJson(response.data);
     } catch (e) {
       _error = e.toString();
@@ -31,7 +33,7 @@ class DriveService extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   void navigateToFolder(int? folderId) {
     _currentFolderId = folderId;
     notifyListeners();
@@ -39,18 +41,22 @@ class DriveService extends ChangeNotifier {
 
   List<dynamic> get currentItems {
     if (_currentDrive == null) return [];
-    
-    final items = _currentDrive!.files.where((f) => f.folderId == _currentFolderId && f.deletedAt == null).toList();
-    final folders = _currentDrive!.folders.where((f) => f.parentId == _currentFolderId).toList();
-    
+
+    final items = _currentDrive!.files
+        .where((f) => f.folderId == _currentFolderId && f.deletedAt == null)
+        .toList();
+    final folders = _currentDrive!.folders
+        .where((f) => f.parentId == _currentFolderId)
+        .toList();
+
     return [...folders, ...items];
   }
-  
+
   Future<List<Item>> search(String q) async {
-    final response = await ApiClient.dio.get('/search', queryParameters: {
-      'q': q,
-      'space': _currentSpace
-    });
+    final response = await ApiClient.dio.get(
+      '/search',
+      queryParameters: {'q': q, 'space': _currentSpace},
+    );
     return (response.data as List).map((i) => Item.fromJson(i)).toList();
   }
 
