@@ -1,21 +1,18 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Thin wrapper around [FlutterSecureStorage] for the JWT.
-///
-/// The token is stored in the platform's encrypted store (Keystore on
-/// Android) — never in SharedPreferences.
 class TokenStorage {
-  TokenStorage([FlutterSecureStorage? storage])
-      : _storage = storage ?? const FlutterSecureStorage();
+  static const _storage = FlutterSecureStorage();
+  static const _tokenKey = 'jwt_token';
 
-  static const String _tokenKey = 'auth_token';
+  static Future<void> saveToken(String token) async {
+    await _storage.write(key: _tokenKey, value: token);
+  }
 
-  final FlutterSecureStorage _storage;
+  static Future<String?> getToken() async {
+    return await _storage.read(key: _tokenKey);
+  }
 
-  Future<void> saveToken(String token) =>
-      _storage.write(key: _tokenKey, value: token);
-
-  Future<String?> readToken() => _storage.read(key: _tokenKey);
-
-  Future<void> deleteToken() => _storage.delete(key: _tokenKey);
+  static Future<void> deleteToken() async {
+    await _storage.delete(key: _tokenKey);
+  }
 }

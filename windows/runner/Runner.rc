@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.sarastya" "\0"
-            VALUE "FileDescription", "projektask" "\0"
+            VALUE "CompanyName", "id.web.tncp" "\0"
+            VALUE "FileDescription", "saradrive" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "projektask" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.sarastya. All rights reserved." "\0"
-            VALUE "OriginalFilename", "projektask.exe" "\0"
-            VALUE "ProductName", "projektask" "\0"
+            VALUE "InternalName", "saradrive" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 id.web.tncp. All rights reserved." "\0"
+            VALUE "OriginalFilename", "saradrive.exe" "\0"
+            VALUE "ProductName", "saradrive" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

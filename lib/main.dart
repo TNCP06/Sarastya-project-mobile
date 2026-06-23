@@ -1,100 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import 'providers/auth_provider.dart';
-import 'providers/project_detail_provider.dart';
-import 'providers/project_provider.dart';
-import 'router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
-import 'services/project_service.dart';
-import 'services/task_service.dart';
-import 'services/token_storage.dart';
+import 'services/drive_service.dart';
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/drive_screen.dart';
+import 'screens/search_screen.dart';
+import 'screens/item_detail_screen.dart';
+import 'screens/video_player_screen.dart';
 
 void main() {
-  runApp(const ProjekTaskApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  ApiClient.init();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => DriveService()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
-class ProjekTaskApp extends StatefulWidget {
-  const ProjekTaskApp({super.key});
+class MyApp extends StatelessWidget {
+  final GoRouter _router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(path: '/', builder: (context, state) => SplashScreen()),
+      GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
+      GoRoute(path: '/register', builder: (context, state) => RegisterScreen()),
+      GoRoute(path: '/drive', builder: (context, state) => DriveScreen()),
+      GoRoute(path: '/search', builder: (context, state) => SearchScreen()),
+      GoRoute(
+        path: '/item/:id',
+        builder: (context, state) =>
+            ItemDetailScreen(id: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/player/:id',
+        builder: (context, state) =>
+            VideoPlayerScreen(id: state.pathParameters['id']!),
+      ),
+    ],
+  );
 
-  @override
-  State<ProjekTaskApp> createState() => _ProjekTaskAppState();
-}
-
-class _ProjekTaskAppState extends State<ProjekTaskApp> {
-  late final TokenStorage _tokenStorage;
-  late final ApiClient _apiClient;
-  late final AuthService _authService;
-  late final AuthProvider _authProvider;
-  late final ProjectService _projectService;
-  late final ProjectProvider _projectProvider;
-  late final TaskService _taskService;
-  late final ProjectDetailProvider _projectDetailProvider;
-  late final GoRouter _router;
-
-  // Used to surface a "session expired" message from outside the widget tree
-  // (the 401 interceptor) without needing a BuildContext.
-  final GlobalKey<ScaffoldMessengerState> _messengerKey =
-      GlobalKey<ScaffoldMessengerState>();
-
-  @override
-  void initState() {
-    super.initState();
-    // Compose the dependency graph once for the app's lifetime.
-    _tokenStorage = TokenStorage();
-    _apiClient = ApiClient(_tokenStorage);
-    _authService = AuthService(_apiClient);
-    _authProvider = AuthProvider(_authService, _tokenStorage, _apiClient);
-    _projectService = ProjectService(_apiClient);
-    _projectProvider = ProjectProvider(_projectService);
-    _taskService = TaskService(_apiClient);
-    _projectDetailProvider =
-        ProjectDetailProvider(_projectService, _taskService);
-    _router = createRouter(_authProvider);
-
-    // Show a message when a session is dropped by a 401 (expired token).
-    _authProvider.onSessionExpired = () {
-      _messengerKey.currentState
-        ?..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(content: Text('Session expired. Please sign in again.')),
-        );
-    };
-
-    // Validate any stored session, then let the router redirect accordingly.
-    _authProvider.bootstrap();
-  }
-
-  @override
-  void dispose() {
-    _authProvider.dispose();
-    _projectProvider.dispose();
-    _projectDetailProvider.dispose();
-    super.dispose();
-  }
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<ApiClient>.value(value: _apiClient),
-        ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
-        ChangeNotifierProvider<ProjectProvider>.value(value: _projectProvider),
-        ChangeNotifierProvider<ProjectDetailProvider>.value(
-            value: _projectDetailProvider),
-      ],
-      child: MaterialApp.router(
-        title: 'ProjekTask',
-        scaffoldMessengerKey: _messengerKey,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D5AFE)),
-          useMaterial3: true,
-        ),
-        routerConfig: _router,
-      ),
+    return MaterialApp.router(
+      title: 'Sarastya Drive',
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      routerConfig: _router,
     );
   }
 }

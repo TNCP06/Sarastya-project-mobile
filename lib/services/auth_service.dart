@@ -1,55 +1,71 @@
-import '../models/user.dart';
+import 'package:flutter/material.dart';
 import 'api_client.dart';
+import 'token_storage.dart';
+import '../models/user.dart';
+import 'package:dio/dio.dart';
 
-/// Result of a successful login/register: the JWT plus the user it belongs to.
-class AuthResult {
-  const AuthResult({required this.token, required this.user});
+class AuthService extends ChangeNotifier {
+  User? _currentUser;
+  bool _isLoading = true;
 
-  final String token;
-  final User user;
-}
+  User? get currentUser => _currentUser;
+  bool get isLoading => _isLoading;
+  bool get isAuthenticated => _currentUser != null;
 
-/// Wraps the authentication endpoints of the API.
-class AuthService {
-  AuthService(this._apiClient);
-
-  final ApiClient _apiClient;
-
-  /// POST /api/auth/register → 201 `{ token, user }`.
-  Future<AuthResult> register({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
-    final res = await _apiClient.dio.post<Map<String, dynamic>>(
-      '/auth/register',
-      data: {'name': name, 'email': email, 'password': password},
-    );
-    return _parseAuth(res.data!);
+  Future<void> checkAuth() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final token = await TokenStorage.getToken();
+      if (token == null) {
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+      final response = await ApiClient.dio.get('/auth/me');
+      _currentUser = User.fromJson(response.data);
+    } catch (e) {
+      await TokenStorage.deleteToken();
+      _currentUser = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  /// POST /api/auth/login → 200 `{ token, user }`.
-  Future<AuthResult> login({
-    required String email,
-    required String password,
-  }) async {
-    final res = await _apiClient.dio.post<Map<String, dynamic>>(
-      '/auth/login',
-      data: {'email': email, 'password': password},
-    );
-    return _parseAuth(res.data!);
+  Future<void> login(String email, String password) async {
+    try {
+      final response = await ApiClient.dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
+      final token = response.data['token'];
+      await TokenStorage.saveToken(token);
+      _currentUser = User.fromJson(response.data['user']);
+      notifyListeners();
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Login failed');
+    }
   }
 
-  /// GET /api/auth/me → 200 `{ id, name, email }`.
-  Future<User> me() async {
-    final res = await _apiClient.dio.get<Map<String, dynamic>>('/auth/me');
-    return User.fromJson(res.data!);
+  Future<void> register(String name, String email, String password) async {
+    try {
+      final response = await ApiClient.dio.post(
+        '/auth/register',
+        data: {'name': name, 'email': email, 'password': password},
+      );
+      final token = response.data['token'];
+      await TokenStorage.saveToken(token);
+      _currentUser = User.fromJson(response.data['user']);
+      notifyListeners();
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Register failed');
+    }
   }
 
-  AuthResult _parseAuth(Map<String, dynamic> data) {
-    return AuthResult(
-      token: data['token'] as String,
-      user: User.fromJson(data['user'] as Map<String, dynamic>),
-    );
+  Future<void> logout() async {
+    await TokenStorage.deleteToken();
+    _currentUser = null;
+    notifyListeners();
   }
 }
