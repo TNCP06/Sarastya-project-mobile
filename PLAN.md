@@ -26,11 +26,11 @@ download trigger (open the bot deep link), loading/empty/error states.
 - Stream URLs come from `GET /papi/items/{id}/stream-info`; video plays from **stream.tncp.web.id**.
 
 ## Tasks
-- 4A ☐ `flutter create` fresh app; models `User, Folder, Item, Part, Tag`. Dio base URL + JWT interceptor.
+- 4A ☑ `flutter create` fresh app; models `User, Folder, Item, Part, Tag`. Dio base URL + JWT interceptor.
        Services: `auth_service`, `drive_service` (browse/search/detail), `stream_service`.
-- 4B ☐ Screens: splash, login, register, drive browse (grid + folder nav), search, item/media
+- 4B ☑ Screens: splash, login, register, drive browse (grid + folder nav), search, item/media
        detail, video player, download action.
-- 4C ☐ Loading/error feedback; theme; build APK; README + APK release instructions.
+- 4C ☑ Loading/error feedback; theme; build APK; README + APK release instructions.
 
 ## Build
 - `flutter build apk --release` → attach to a GitHub Release on this repo (brief requires installable
