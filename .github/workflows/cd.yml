@@ -1,0 +1,13 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Placeholder
+        run: echo "No deployment strategy for mobile project yet."
