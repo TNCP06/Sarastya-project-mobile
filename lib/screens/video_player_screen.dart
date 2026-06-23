@@ -6,7 +6,7 @@ import '../services/stream_service.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String id;
-  VideoPlayerScreen({required this.id});
+  const VideoPlayerScreen({super.key, required this.id});
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();

@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final String id;
-  ItemDetailScreen({required this.id});
+  const ItemDetailScreen({super.key, required this.id});
 
   @override
   _ItemDetailScreenState createState() => _ItemDetailScreenState();

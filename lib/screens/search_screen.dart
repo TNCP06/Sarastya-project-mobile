@@ -6,6 +6,8 @@ import '../services/drive_service.dart';
 import '../models/item.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
